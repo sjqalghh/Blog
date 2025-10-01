@@ -1,16 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Blog</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- 引入docsify基础样式 -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    /* 1. 封面样式（固定定位+独立背景+层级最高） */
+    .cover {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background: url('fufu2.jpg') no-repeat center center fixed !important;
+      background-size: cover !important;
+      color: #fff;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      visibility: visible;
+    }
+
+    /* 2. 内容区背景容器（固定背景） */
+    .content-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('fufu.jpg') no-repeat center center fixed;
+      background-size: cover;
+      z-index: -1;
+    }
+    
+    body {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      background: transparent !important;
+    }
+    
+    .sidebar,
+    .sidebar-toggle,
+    .sidebar > div {
+      background: transparent !important;
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+
+    /* 3. 滚动控制 */
+    .cover:not(.hidden) ~ body {
+      overflow: hidden !important;
+    }
+
+    /* 4. 文字与链接样式优化 */
+    .sidebar {
+      color: #fff;
+      border-right: none !important;
+    }
+    
+    .markdown-section {
+      background-color: transparent !important; /* 移除半透明背景，文字直接在背景图上显示 */
+      color: #333; /* 深色文字适配浅色背景图，可根据背景调整 */
+      text-shadow: 0 0 2px rgba(255,255,255,0.8); /* 文字阴影增强可读性 */
+      padding: 2em;
+      margin: 1em;
+    }
+    
+    /* 若背景图较深，可切换为白色文字 */
+    /* .markdown-section {
+      color: #fff;
+      text-shadow: 0 0 2px rgba(0,0,0,0.5);
+    } */
+    
+    .cover a, .sidebar a {
+      color: #fff;
+      border-color: #fff;
+      transition: all 0.2s ease;
+    }
+    
+    .cover a:hover, .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* 5. 侧边栏按钮样式优化 */
+    .sidebar-toggle {
+      border-top: none !important;
+      color: #fff;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+    
+    .sidebar-toggle:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* 6. 封面显示/隐藏过渡逻辑 */
+    .cover.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    
+    /* 7. 侧边栏过渡效果优化 */
+    .sidebar {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    
+    .sidebar.hidden {
+      transform: translateX(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 999;
+        height: 100%;
+      }
+      
+      .sidebar.show {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- 内容背景容器 -->
+  <div class="content-background"></div>
   <div id="app"></div>
+  
   <script>
+    // docsify 核心配置
     window.$docsify = {
       name: '',
       repo: '',
@@ -18,12 +148,34 @@
       subMaxLevel: 2,
       coverpage: true,
       loadNavbar: true,
-
-    
       
+      // 路由切换时控制封面显示/隐藏
+      onRouteChange: function() {
+        const cover = document.querySelector('.cover');
+        if (window.location.hash === '' || window.location.hash === '#') {
+          cover.classList.remove('hidden');
+        } else {
+          cover.classList.add('hidden');
+        }
+      },
+      
+      // 初始化完成后优化侧边栏交互
+      mounted: function() {
+        const toggleBtn = document.querySelector('.sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (toggleBtn && sidebar) {
+          toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('show');
+          });
+        }
+      }
     }
   </script>
-  <!-- Docsify v4 -->
+  
+  <!-- 引入docsify核心脚本 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 </body>
 </html>
