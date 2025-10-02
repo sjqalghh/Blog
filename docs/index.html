@@ -22,6 +22,10 @@
       color: #fff;
       transition: opacity 0.3s ease, visibility 0.3s ease;
       visibility: visible;
+      /* 调整封面图片透明度 (值介于0-1之间，0为完全透明，1为完全不透明) */
+      opacity: 1;
+      /* 修改为更深的黑色滤镜，去除灰色效果 */
+      filter: brightness(0.4) contrast(1.0);
     }
 
     /* 2. 内容区背景容器（固定背景） */
@@ -34,6 +38,10 @@
       background: url('fufu.jpg') no-repeat center center fixed;
       background-size: cover;
       z-index: -1;
+      /* 调整内容背景图片透明度 */
+      opacity: 0.5;
+      /* 修改为更深的黑色滤镜，去除灰色效果 */
+      filter: brightness(0.4) contrast(1.0);
     }
     
     body {
@@ -62,28 +70,50 @@
       border-right: none !important;
     }
     
+    /* 修改markdown内容区域的字体显示效果，让文字融入背景而不是放在黑框中 */
     .markdown-section {
-      background-color: transparent !important; /* 移除半透明背景，文字直接在背景图上显示 */
-      color: #333; /* 深色文字适配浅色背景图，可根据背景调整 */
-      text-shadow: 0 0 2px rgba(255,255,255,0.8); /* 文字阴影增强可读性 */
+      background-color: transparent !important; /* 移除黑色背景框 */
+      color: #ffffff !important; /* 使用更亮的白色文字 */
       padding: 2em;
       margin: 1em;
+      border-radius: 0; /* 移除圆角 */
     }
     
-    /* 若背景图较深，可切换为白色文字 */
-    /* .markdown-section {
-      color: #fff;
-      text-shadow: 0 0 2px rgba(0,0,0,0.5);
-    } */
+    /* 特别加强 blockquote 元素（> 符号开头的文字）的显示效果 */
+    .markdown-section blockquote {
+      color: #ffffff !important; /* 使用纯白色提高可读性 */
+      background-color: rgba(0, 0, 0, 0.3) !important; /* 添加半透明背景提高对比度 */
+      font-weight: bold; /* 加粗文字 */
+      border: none !important; /* 移除所有边框 */
+      box-shadow: none !important; /* 移除阴影 */
+    }
     
-    .cover a, .sidebar a {
-      color: #fff;
-      border-color: #fff;
+    /* 调整侧边栏文字样式，让文字更好地融入背景 */
+    .sidebar {
+      color: #ffffff; /* 使用纯白色提高可读性 */
+    }
+    
+    /* 优化侧边栏链接样式，让文字融入背景 */
+    .sidebar a {
+      color: #ffffff;
+      border-color: transparent; /* 移除边框 */
       transition: all 0.2s ease;
     }
     
-    .cover a:hover, .sidebar a:hover {
-      background: rgba(255, 255, 255, 0.2);
+    .sidebar a:hover {
+      color: #cccccc; /* 添加悬停效果 */
+    }
+    
+    /* 调整封面链接样式 */
+    .cover a {
+      color: #ffffff;
+      border-color: #ffffff;
+      transition: all 0.2s ease;
+      text-shadow: none !important; /* 去除链接文字阴影 */
+    }
+    
+    .cover a:hover {
+      text-shadow: none !important; /* 去除悬停时的文字阴影 */
     }
 
     /* 5. 侧边栏按钮样式优化 */
@@ -96,7 +126,6 @@
     
     .sidebar-toggle:hover {
       opacity: 1;
-      background: rgba(255, 255, 255, 0.1) !important;
     }
 
     /* 6. 封面显示/隐藏过渡逻辑 */
@@ -166,11 +195,19 @@
         
         if (toggleBtn && sidebar) {
           toggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
+            e.stopPropagation(); // 阻止事件冒泡
             sidebar.classList.toggle('hidden');
             sidebar.classList.toggle('show');
           });
         }
+        
+        // 添加点击文档其他部分隐藏侧边栏的功能
+        document.addEventListener('click', function(e) {
+          if (sidebar && sidebar.classList.contains('show')) {
+            sidebar.classList.remove('show');
+            sidebar.classList.add('hidden');
+          }
+        });
       }
     }
   </script>
