@@ -19,7 +19,10 @@
 [网上最大免费收藏](https://www.freeshare.cc/)
 
 
-* 2025_10_02 今日分享付费专区克星
+* 2025_10_02 今日分享付费专区克星 and PDF24
 > 访问网站即可查看
 [付费专区克星](https://paywallbuster.com/)
+
+> PDF24无需注册专门用于处理PDF包含多种工具
+[PDF24](https://tools.pdf24.org/en/all-tools/)
 
